@@ -150,10 +150,9 @@ namespace GameOfLife
         public Cell CalculateNextGeneration(int row, int column)    // UNOPTIMIZED
         {
             bool alive;
-            int count, age;
+            int count;
 
             alive = cells[row, column].IsAlive;
-            age = cells[row, column].Age;
             count = CountNeighbors(row, column);
 
             if (alive && count < 2)
@@ -164,9 +163,6 @@ namespace GameOfLife
                 cells[row, column].Age++;
                 return new Cell(row, column, cells[row, column].Age, true);
             }
-
-            if (alive && count > 3)
-                return new Cell(row, column, 0, false);
             
             if (!alive && count == 3)
                 return new Cell(row, column, 0, true);
@@ -181,7 +177,7 @@ namespace GameOfLife
 
             int count = CountNeighbors(row, column);
 
-            if (isAlive && count < 2)
+            if (isAlive && (count < 2 || count >3))
             {
                 isAlive = false;
                 age = 0;
@@ -192,12 +188,6 @@ namespace GameOfLife
                 cells[row, column].Age++;
                 isAlive = true;
                 age = cells[row, column].Age;
-            }
-
-            if (isAlive && count > 3)
-            {
-                isAlive = false;
-                age = 0;
             }
 
             if (!isAlive && count == 3)
